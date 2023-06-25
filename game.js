@@ -1,3 +1,20 @@
+
+// Boss Class
+class Boss {
+    constructor(name, xPosition, yPosition) {
+        this.name = name;
+        this.xPosition = xPosition;
+        this.yPosition = yPosition;
+    }
+}
+
+// Random Boss Generator
+function getNewBoss(name) {
+    var xPosition = Math.floor(Math.random() * background.offsetWidth);
+    var yPosition = Math.floor(Math.random() * background.offsetHeight);
+    return new Boss(name, xPosition, yPosition);
+}
+
 window.onload = function() {
     var hero = document.getElementById('hero');
     var background = document.getElementById('background');
@@ -18,6 +35,39 @@ window.onload = function() {
 
     var xpElement = document.getElementById('xp');
     var xp = 0; // the hero's XP starts at 0
+
+
+    var num_bosses = 20
+    for (let i = 0; i < num_bosses; i++) {
+        // Generate a new boss
+        var randomBoss = getNewBoss("boss" + i);
+
+        // Create the boss element
+        var bossElement = document.createElement('div');
+        bossElement.classList.add('boss');
+        bossElement.style.left = randomBoss.xPosition + 'px';
+        bossElement.style.top = randomBoss.yPosition + 'px';
+        bossElement.id = randomBoss.name;
+
+        // Add the boss to the game
+        document.getElementById('background').appendChild(bossElement);
+        animateBoss(bossElement);
+    }
+    // Boss sprite dimensions
+    var bossSpriteWidth = 300;
+    var bossSpriteHeight = 300;
+
+    // Animation function
+    function animateBoss(boss) {
+        var bossSpriteCount = 0;
+
+        setInterval(function() {
+            bossSpriteCount = (bossSpriteCount + 1) % 4; // Assuming there are 4 frames in your sprite sheet
+            var backgroundX = '-' + (bossSpriteCount * bossSpriteWidth) + 'px';
+            boss.style.backgroundPosition = backgroundX + ' ' + '0px'; // Assuming animation is in a single row
+        }, 500); // Change sprite every 500ms
+    }
+
 
 
     // Store the latest keydown event
