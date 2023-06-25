@@ -1,0 +1,23 @@
+#game {
+    position: relative;
+    overflow: hidden;
+    height: 400px;
+    width: 600px;
+    border: 1px solid black;
+}
+
+#background {
+    position: absolute;
+    height: 800px;
+    width: 1200px;
+    background: url('background.png') no-repeat;
+    background-size: cover;
+}
+
+#hero {
+    position: absolute;
+    height: 130px;  /* Set to your hero image height */
+    width: 130px;  /* Set to your hero image width */
+    top: 200px;
+    left: 300px;
+}

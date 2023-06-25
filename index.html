@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        #game {
+            position: relative;
+            width: 800px;
+            height: 800px;
+            overflow: hidden;
+            border: 1px solid black;
+        }
+
+        #background {
+            position: absolute;
+            width: 2560px;
+            height: 1600px;
+            background: url('background2.png') no-repeat;
+            left: 0px;
+            top: 0px;
+        }
+
+		#hero {
+		    position: absolute;
+		    width: 256px; /* width of a single sprite */
+		    height: 256px; /* height of a single sprite */
+		    top: 0px;
+		    left: 0px;
+		    background: url('hero-sprite-sheet3.png') 0 0 no-repeat;
+		    background-size: 1024px 1024px; /* size of the whole sprite sheet */
+		    transform: scale(1); /* scaling down the sprite to 50% */
+		}
+		@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+		#profile {
+		    position: absolute;
+		    top: 0;
+		    right: 0;
+		    background: rgba(255, 255, 255, 0.5); /* semi-transparent white, adjust opacity as desired */
+    		padding: 5px 10px; /* reduce vertical padding to 5px */
+		    border-radius: 0 0 0 10px;
+		    z-index: 100; /* optional: use this if other elements are overlapping the profile */
+		    font-family: 'Press Start 2P', cursive; /* specify the 'Press Start 2P' font */
+		    font-size: 24px; /* larger font size */
+		    font-weight: bold; /* bold text */
+		}
+
+
+
+    </style>
+    <script src="game.js"></script>
+</head>
+<body>
+    <div id="game">
+        <div id="background"></div>
+        <div id="hero" style="left: 0px;"></div>
+        <div id="profile"><h2>Hero Profile</h2><p id="xp">XP: 0</p></div>
+    </div>
+</body>
+</html>
