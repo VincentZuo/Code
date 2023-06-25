@@ -1,10 +1,12 @@
 
 // Boss Class
 class Boss {
-    constructor(name, xPosition, yPosition) {
+    constructor(name, xPosition, yPosition, question, answer) {
         this.name = name;
         this.xPosition = xPosition;
         this.yPosition = yPosition;
+        this.question = question;
+        this.answer = answer;
     }
 }
 
@@ -12,8 +14,11 @@ class Boss {
 function getNewBoss(name) {
     var xPosition = Math.floor(Math.random() * background.offsetWidth);
     var yPosition = Math.floor(Math.random() * background.offsetHeight);
-    return new Boss(name, xPosition, yPosition);
+    var question= 'What is the ultimate answer to everything?';
+    var answer = 42;
+    return new Boss(name, xPosition, yPosition, question, answer);
 }
+
 
 window.onload = function() {
     var hero = document.getElementById('hero');
@@ -34,13 +39,22 @@ window.onload = function() {
     };
 
     var xpElement = document.getElementById('xp');
-    var xp = 0; // the hero's XP starts at 0
+    var heroXp = 0; // the hero's XP starts at 0
+
+
+    var inBattle = false; // Add this global variable
+
+
+    // This will hold all of the bosses in the game
+    var bosses = [];
+    var currentBoss = null;
 
 
     var num_bosses = 20
     for (let i = 0; i < num_bosses; i++) {
         // Generate a new boss
         var randomBoss = getNewBoss("boss" + i);
+        bosses.push(randomBoss); // Add the boss to the bosses array
 
         // Create the boss element
         var bossElement = document.createElement('div');
@@ -65,7 +79,7 @@ window.onload = function() {
             bossSpriteCount = (bossSpriteCount + 1) % 4; // Assuming there are 4 frames in your sprite sheet
             var backgroundX = '-' + (bossSpriteCount * bossSpriteWidth) + 'px';
             boss.style.backgroundPosition = backgroundX + ' ' + '0px'; // Assuming animation is in a single row
-        }, 500); // Change sprite every 500ms
+        }, 200); // Change sprite every 500ms
     }
 
 
@@ -102,9 +116,22 @@ window.onload = function() {
         requestAnimationFrame(moveHero);
     }
 
+    function initiateBattle(boss) {
+        // Set the question for this boss
+        document.getElementById('question').innerText = currentBoss.question;
+        console.log(currentBoss);
+
+        // Show the battle screen
+        document.getElementById('battle').style.display = 'block';
+    }
+
 
     function checkKey(e) {
         e = e || window.event;
+
+        if (inBattle) {
+            return; // Do nothing if in battle
+        }
 
         var heroPosition = hero.getBoundingClientRect();
         var gamePosition = game.getBoundingClientRect();
@@ -187,7 +214,50 @@ window.onload = function() {
                 hero.style.top = (heroPosition.top - gamePosition.top + heroSpeed) + 'px';
             }
         }
+
+        if (e.keyCode == '32') {
+            // spacebar pressed
+            for (var boss of bosses) {
+                var bossElement = document.getElementById(boss.name);
+                var bossPosition = bossElement.getBoundingClientRect();
+
+                if (Math.abs(heroPosition.left - bossPosition.left) < 100 && 
+                    Math.abs(heroPosition.top - bossPosition.top) < 100) {
+                    // The hero is close to a boss
+                    
+                    // Initiate battle
+                    currentBoss = boss;
+                    initiateBattle(boss);
+                    inBattle = true;
+                    break;
+                }
+            }
+        }
     }
+
+    document.getElementById('answer').addEventListener('keydown', function(e) {
+        if (e.keyCode == '13') {
+            // Enter key was pressed
+            var answer = document.getElementById('answer').value;
+            
+            // Check if the answer is correct
+            if (answer == currentBoss.answer) {
+                // Answer is correct, increase XP
+                heroXp += 10;
+                document.getElementById('xp').innerText = 'XP: ' + heroXp;
+            }
+            
+            // Remove the boss
+            var bossElement = document.getElementById(currentBoss.name);
+            bossElement.parentNode.removeChild(bossElement);
+            bosses = bosses.filter(item => item !== currentBoss);
+
+            // Hide the battle screen
+            document.getElementById('battle').style.display = 'none';
+            inBattle = false;
+        }
+    });
+
 
     // Start the animation loop
     moveHero();

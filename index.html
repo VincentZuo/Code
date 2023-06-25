@@ -10,6 +10,23 @@
             border: 1px solid black;
         }
 
+		 #battle {
+		    position: fixed;
+/*		    top: 50%;
+		    left: 50%;
+		    transform: translate(-50%, -50%);*/
+		    width: 60%;
+		    height: 100%;
+		    background: rgba(255, 255, 255, 0.5); /* semi-transparent white, adjust opacity as desired */
+		    padding: 20px;
+		    border-radius: 10px;
+		    text-align: center;
+		    z-index: 100;
+		    background-image: url('temple.jpeg'); /* Use your actual image URL */
+		    background-size: cover; /* This will make the background image cover the whole div */
+		}
+
+
         #background {
             position: absolute;
             width: 2560px;
@@ -44,6 +61,19 @@
 		    font-weight: bold; /* bold text */
 		}
 
+		#question {
+			top: 50%;
+		    font-family: 'Press Start 2P', cursive; /* specify the 'Press Start 2P' font */
+		    font-size: 48px; /* larger font size */
+		    font-weight: bold; /* bold text */
+		    color: gold; /* set the font color to silver */
+		    z-index: 1000;
+		    display: flex; /* enable flexbox layout */
+		    justify-content: center; /* horizontally center the content */
+		    align-items: center; /* vertically center the content */
+
+		}
+
 		.boss {
 		    position: absolute;
 		    width: 300px; /* width of a single sprite */
@@ -61,6 +91,11 @@
         <div id="background"></div>
         <div id="hero" style="left: 0px;"></div>
         <div id="profile"><h2>Hero Profile</h2><p id="xp">XP: 0</p></div>
+			<div id="battle" style="display: none;">
+			    <div id="question"></div>
+			    <input type="text" id="answer">
+			</div>
     </div>
+
 </body>
 </html>
