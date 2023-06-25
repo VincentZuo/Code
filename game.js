@@ -11,11 +11,9 @@ class Boss {
 }
 
 // Random Boss Generator
-function getNewBoss(name) {
+function getNewBoss(name, question, answer) {
     var xPosition = Math.floor(Math.random() * background.offsetWidth);
     var yPosition = Math.floor(Math.random() * background.offsetHeight);
-    var question= 'What is the ultimate answer to everything?';
-    var answer = 42;
     return new Boss(name, xPosition, yPosition, question, answer);
 }
 
@@ -51,22 +49,57 @@ window.onload = function() {
 
 
     var num_bosses = 20
-    for (let i = 0; i < num_bosses; i++) {
-        // Generate a new boss
-        var randomBoss = getNewBoss("boss" + i);
-        bosses.push(randomBoss); // Add the boss to the bosses array
+    // Assuming your CSV file is hosted at 'https://example.com/myfile.csv'
+    fetch('https://raw.githubusercontent.com/VincentZuo/Code/main/catgame.csv')
+        .then(response => response.text())
+        .then(data => {
+            var results = Papa.parse(data, {
+                header: true,
+                dynamicTyping: true
+            }).data;
+            console.log("results parsed ", results)
 
-        // Create the boss element
-        var bossElement = document.createElement('div');
-        bossElement.classList.add('boss');
-        bossElement.style.left = randomBoss.xPosition + 'px';
-        bossElement.style.top = randomBoss.yPosition + 'px';
-        bossElement.id = randomBoss.name;
+            // Now results is an array of objects, where each object is a row from the CSV file
+            // Each object has properties corresponding to the column names in the CSV file
 
-        // Add the boss to the game
-        document.getElementById('background').appendChild(bossElement);
-        animateBoss(bossElement);
-    }
+            // You can create the bosses here, using the data from the CSV file
+            results.forEach(row => {
+                let randomBoss = getNewBoss(row.Id, row.question, row.answer);
+                bosses.push(randomBoss); // Add the boss to the bosses array
+                // ... rest of your boss creation code ...''
+                console.log("randomBoss created ", randomBoss)
+                var bossElement = document.createElement('div');
+                bossElement.classList.add('boss');
+                bossElement.style.left = randomBoss.xPosition + 'px';
+                bossElement.style.top = randomBoss.yPosition + 'px';
+                bossElement.id = randomBoss.name;
+
+            // Add the boss to the game
+            document.getElementById('background').appendChild(bossElement);
+            animateBoss(bossElement);
+
+            });
+        })
+        .catch(error => console.error('Error:', error));
+
+
+
+    // for (let i = 0; i < num_bosses; i++) {
+    //     // Generate a new boss
+    //     var aboss = bosses[i]
+    //         console.log("a boss selected ", aboss)
+
+    //     // Create the boss element
+    //     var bossElement = document.createElement('div');
+    //     bossElement.classList.add('boss');
+    //     bossElement.style.left = aboss.xPosition + 'px';
+    //     bossElement.style.top = aboss.yPosition + 'px';
+    //     bossElement.id = aboss.name;
+
+    //     // Add the boss to the game
+    //     document.getElementById('background').appendChild(bossElement);
+    //     animateBoss(bossElement);
+    // }
     // Boss sprite dimensions
     var bossSpriteWidth = 300;
     var bossSpriteHeight = 300;
